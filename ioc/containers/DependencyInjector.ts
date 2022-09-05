@@ -5,7 +5,9 @@ import ConsoleLogger from "../../core/logger/ConsoleLogger";
 export default class DependencyInjector implements Observable{
     private observerList:Array<Observer>;
     private classNameList = new Array<string>();
-    constructor(){
+    private static instance:DependencyInjector;
+
+    private constructor(){
         this.observerList = new Array<Observer>();
         this.classNameList = new Array<string>();
     }
@@ -29,5 +31,11 @@ export default class DependencyInjector implements Observable{
         this.notifyAll()
     }
 
-    
+    public static getInstance():DependencyInjector{
+        if(this.instance==null){
+            this.instance = new DependencyInjector()
+        }
+        return this.instance;
+    }
+
 }
