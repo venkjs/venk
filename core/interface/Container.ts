@@ -1,4 +1,4 @@
-import ContainerObject from "../types/ContainerObject";
+import ContainerObject from "../../ioc/types/ContainerObject";
 
 export default interface Container{
     
