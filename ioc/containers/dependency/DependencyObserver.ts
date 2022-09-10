@@ -4,7 +4,7 @@ import ContainerProvider from "../ContainerProvider";
 import DependencyInjector from "../DependencyInjector";
 import SingletonContainer from "../SingletonContainer";
 
-export default class DependencyObserver implements Observer{
+export default class DependencyObserver implements Observer<Array<Object>>{
     private injectionMethod:Function;
     private key:any;
     private target:any;

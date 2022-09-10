@@ -1,7 +1,7 @@
 import Observer from "./Observer";
 
-export default interface Observable{
+export default interface Observable<T>{
 
-    register(observableObj:Observer):void;
+    register(observableObj:Observer<T>):void;
 
 }
