@@ -2,21 +2,21 @@ import Observable from "../../core/interface/Observable";
 import Observer from "../../core/interface/Observer";
 import ConsoleLogger from "../../core/logger/ConsoleLogger";
 
-export default class DependencyInjector implements Observable{
-    private observerList:Array<Observer>;
+export default class DependencyInjector implements Observable<Object>{
+    private observerList:Array<Observer<Object>>;
     private classNameList = new Array<string>();
     private static instance:DependencyInjector;
 
     private constructor(){
-        this.observerList = new Array<Observer>();
+        this.observerList = new Array<Observer<Object>>();
         this.classNameList = new Array<string>();
     }
 
-    register(observableObj:Observer){
+    register(observableObj:Observer<Object>){
         this.observerList.push(observableObj);
     }
 
-    unregister(observer:Observer){
+    unregister(observer:Observer<Object>){
         this.observerList=this.observerList.filter(observerObject=>observer!==observerObject)
     }
 

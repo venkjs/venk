@@ -1,5 +1,5 @@
-export default interface Observer{
+export default interface Observer<T>{
 
-    notify(objects:Array<Object>):void;
+    notify(object:T):void;
     
 }
