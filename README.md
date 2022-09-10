@@ -32,7 +32,7 @@ export default class ClassB{
 }
 ```
 
-### ** Initializing A Web Server**
+### **Initializing A Web Server**
 Typespring framework allows you to create web api and handle web requests easily. 
 The first step is creating a main file that has a main class as shown below.
 
@@ -65,7 +65,7 @@ export class MainApplication{
 }
 ```
 
-### ** Web Request and Response Handling
+### **Web Request and Response Handling**
 ```javascript
 @Component()
 export default class ClassC{
@@ -87,6 +87,22 @@ export default class ClassC{
 }
 ```
 
+### **Handling Request Params and Body**
+
+```javascript 
+@Component()
+export default class ClassC{
+
+    @GetMapping("/api/test2")
+    public test2(@RequestParam("parameter") parameter:String){
+        let testParam = `Hello ${parameter}`
+        return ResponseEntity.status(HttpStatus.OK).body(testParam)
+    }
+}
+```
+Calling /api/test2?paramter=test endpoing will return "Hello test" with status code 200
+
+Also @RequestBody decorator can be used for handling request body.
 
 
 
