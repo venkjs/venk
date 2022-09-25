@@ -1,9 +1,9 @@
-import ServerProvider from "../../http/server/ServerProvider";
+import {ServerProvider} from "../../http/server/ServerProvider";
 
-export default class TypespringInitiliazer{
+export class TypespringInitiliazer{
 
-    public static run(){
-      ServerProvider.init()
+    public static run(...args:any){
+      ServerProvider.init(...args)
     }
     
 }

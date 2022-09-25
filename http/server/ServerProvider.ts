@@ -2,10 +2,10 @@ import express,{ Express } from 'express';
 import * as dotenv from "dotenv";
 import HttpServerObservable from './HttpServerObservable';
 
-export default class ServerProvider{
+export class ServerProvider{
     private static app:Express;
 
-    public static init(){
+    public static init(...args:any){
         if(!this.app){
             dotenv.config()
             const port = process.env.server_port || 3000

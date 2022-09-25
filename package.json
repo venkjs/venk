@@ -1,8 +1,9 @@
 {
-  "name": "typespring",
-  "version": "1.0.0",
+  "name": "@spring-typescript/typespring",
+  "version": "1.0.8",
   "description": "TypeSpring is an Express.js and Typescript based application framework that allows you to develop annotation based restful APIs for like in SpringBoot",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,5 +24,6 @@
     "express": "^4.18.1",
     "reflect-metadata": "^0.1.13",
     "typescript": "^4.8.2"
-  }
+  },
+  "files":["lib/**/*"]
 }
