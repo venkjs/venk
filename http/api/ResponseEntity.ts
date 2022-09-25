@@ -1,4 +1,4 @@
-export default class ResponseEntity<T>{
+export class ResponseEntity<T>{
 
     private status:number;
     private responseBody:any;

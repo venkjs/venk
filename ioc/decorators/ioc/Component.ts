@@ -3,7 +3,7 @@ import ContainerProvider from "../../containers/ContainerProvider"
 import DependencyInjector from "../../containers/DependencyInjector"
 import ContainerObject from "../../types/ContainerObject"
 
-export default function Component(){
+export function Component(){
     return function (ctr:Function){
         let containerObject = new ContainerObject(ctr.name,ctr)
         ContainerProvider.getContainer(RegistrationTypes.SINGLETON).register(containerObject)

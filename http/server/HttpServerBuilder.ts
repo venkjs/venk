@@ -1,8 +1,8 @@
 import { RequestArgumentInformation } from '../decorators/reflect/ObjectReflection';
 import { Request, Response } from "express"
 import { HttpMethod, RequestArgumentType, REQUEST_ARGUMENT } from "../constants/HttpConstants"
-import ServerProvider from "./ServerProvider"
-import ResponseEntity from '../api/ResponseEntity';
+import {ServerProvider} from "./ServerProvider"
+import {ResponseEntity} from '../api/ResponseEntity';
 
 export default class HttpServerBuilder{
 

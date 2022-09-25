@@ -1,5 +1,5 @@
 import { RequestArgumentType, REQUEST_ARGUMENT } from "../../constants/HttpConstants";
-
+import 'reflect-metadata'
 
 export default class ObjectReflection{
 
