@@ -1,6 +1,32 @@
 # Typespring
 TypeSpring is an Express.js and Typescript based application framework that allows you to develop annotation based restful APIs like in SpringBoot 
 
+## **Installation**
+You can install module through npm. In order to install, Node.js must be installed on your system.
+```
+$ npm install @springts/typespring
+```
+## **Configurations**
+For building your application, you have to use these properties on your tsconfig.json file. 
+enabling experimentalDecorators property will allow you to use decorators in your project.
+Also, strictPropertyInitialization is disabled for dependency injection. and emitDecoratorMetadata is used to enable emitting metadata for decorators. 
+```
+{
+  "compilerOptions": {
+                   
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,              
+    "strictPropertyInitialization": false,      
+    "esModuleInterop": true,                       
+    "experimentalDecorators": true,           
+    "emitDecoratorMetadata": true,            
+    "skipLibCheck": true,                          
+    "forceConsistentCasingInFileNames": true       
+  }
+}
+```
+
 ### **Define component for dependency injection**
 In Typespring framework, you can easily define a component using @Component() decorator. This decorator creates an instance for dependency injection.
 ```javascript
