@@ -1,5 +1,5 @@
 {
-  "name": "@spring-typescript/typespring",
+  "name": "@springts/typespring",
   "version": "1.0.8",
   "description": "TypeSpring is an Express.js and Typescript based application framework that allows you to develop annotation based restful APIs for like in SpringBoot",
   "main": "lib/index.js",
