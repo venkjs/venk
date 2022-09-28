@@ -11,6 +11,18 @@ export function GetMapping(path:string){
     return RequestMapping(path,HttpMethod.GET)
 }
 
+export function PutMapping(path:string){
+    return RequestMapping(path,HttpMethod.PUT)
+}
+
+export function DeleteMapping(path:string){
+    return RequestMapping(path,HttpMethod.DELETE)
+}
+
+export function PatchMapping(path:string){
+    return RequestMapping(path,HttpMethod.PATCH)
+}
+
 export function RequestMapping(path:string,method:HttpMethod){
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor){
         HttpRequestBinder(path,target,propertyKey,descriptor,method)

@@ -8,12 +8,25 @@ export default class HttpServerBuilder{
 
 
     public static registerEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,method:HttpMethod){
-        if(method==HttpMethod.GET){
-            this.registerGetEndpoint(target,propertyKey,descriptor,path)
-        }
-        if(method==HttpMethod.POST){
-            this.registerPostEndpoint(target,propertyKey,descriptor,path)
-        }
+       switch(method){
+            case HttpMethod.POST:
+                this.registerPostEndpoint(target,propertyKey,descriptor,path)
+                break;
+            case HttpMethod.GET:
+                this.registerGetEndpoint(target,propertyKey,descriptor,path)
+                break;
+            case HttpMethod.PUT:
+                this.registerPutEndpoint(target,propertyKey,descriptor,path)
+                break;
+            case HttpMethod.DELETE:
+                this.registerDeleteEndpoint(target,propertyKey,descriptor,path)
+                break;
+            case HttpMethod.PATCH:
+                this.registerPatchEndpoint(target,propertyKey,descriptor,path)
+                break;
+            default:
+                throw new Error("Invalid Http Method.. Please only use GET, POST , PUT, DELETE and PATCH Methods")
+       }
     }
 
     private static registerGetEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
@@ -31,6 +44,31 @@ export default class HttpServerBuilder{
             )
         })
     }
+
+    private static registerPutEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+        ServerProvider.getServer().put(path,(req:Request,res:Response)=>{
+            this.callHttpMethodAndReturnResponse(
+                req,res,target,propertyKey,descriptor
+            )
+        })
+    }
+
+    private static registerDeleteEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+        ServerProvider.getServer().delete(path,(req:Request,res:Response)=>{
+            this.callHttpMethodAndReturnResponse(
+                req,res,target,propertyKey,descriptor
+            )
+        })
+    }
+
+    private static registerPatchEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+        ServerProvider.getServer().patch(path,(req:Request,res:Response)=>{
+            this.callHttpMethodAndReturnResponse(
+                req,res,target,propertyKey,descriptor
+            )
+        })
+    }
+
 
     private static callHttpMethodAndReturnResponse(req:Request,res:Response,target:any,propertyKey:string,descriptor:PropertyDescriptor){
         let requestParams = this.getRequestParams(new Map(),target,propertyKey,descriptor)
@@ -64,7 +102,6 @@ export default class HttpServerBuilder{
                 params[key]  = req.body
             }
         })
-        console.log(parameterMap)
 
         descriptor.value = function () {
             return method.call(target,...params);
