@@ -10,7 +10,7 @@ $ npm install @springts/typespring
 For building your application, you have to use these properties on your tsconfig.json file. 
 enabling experimentalDecorators property will allow you to use decorators in your project.
 Also, strictPropertyInitialization is disabled for dependency injection. and emitDecoratorMetadata is used to enable emitting metadata for decorators. 
-```
+```json
 {
   "compilerOptions": {
                    
