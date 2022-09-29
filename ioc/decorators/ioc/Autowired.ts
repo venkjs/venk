@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import DependencyObserver from '../../containers/dependency/DependencyObserver';
 import DependencyInjector from '../../containers/DependencyInjector';
 
-export function Autowired(name?:string|undefined){
+export function Autowired(name=""):(target: any, key: string) => void{
     return (target:any, key:string): void => {
         
         var t = Reflect.getMetadata("design:type", target, key);
@@ -28,3 +28,4 @@ export function Autowired(name?:string|undefined){
 
 
 }
+
