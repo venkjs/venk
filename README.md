@@ -3,7 +3,7 @@ TypeSpring is an Express.js and Typescript based application framework that allo
 
 ## **Installation**
 You can install module through npm. In order to install, Node.js must be installed on your system.
-```cmd
+```
 $ npm install @springts/typespring
 ```
 ## **Configurations**
