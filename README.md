@@ -120,15 +120,16 @@ export default class ClassC{
 export default class ClassC{
 
     @GetMapping("/api/test2")
-    public test2(@RequestParam("parameter") parameter:String){
+    public test2(@RequestParam() parameter:String){
         let testParam = `Hello ${parameter}`
         return ResponseEntity.status(HttpStatus.OK).body(testParam)
     }
 }
 ```
-Calling /api/test2?paramter=test endpoing will return "Hello test" with status code 200
+Calling /api/test2?parameter=test endpoing will return "Hello test" with status code 200. If request does not inckudes the parameter, typespring will return a response with status code 400 (HTTP Bad Request).
 
 Also @RequestBody decorator can be used for handling request body.
+
 
 
 
