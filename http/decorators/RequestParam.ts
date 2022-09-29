@@ -1,7 +1,7 @@
 import { RequestArgumentType } from "../constants/HttpConstants"
 import ObjectReflection from "./reflect/ObjectReflection"
 
-export function RequestParam(paramKey:string){
+export function RequestParam(paramKey?:string){
     
     return function(target: Object,
         propertyKey: string | symbol,
@@ -15,8 +15,15 @@ export function RequestBody(){
     return function(target: Object,
         propertyKey: string | symbol,
         parameterIndex: number){
-            ObjectReflection.addReflection(RequestArgumentType.REQUEST_BODY,"",target,propertyKey,parameterIndex)
+            ObjectReflection.addReflection(RequestArgumentType.REQUEST_BODY,null,target,propertyKey,parameterIndex)
         }
 }
 
+export function PathVariable(variableName?:string){
+    return function(target: Object,
+        propertyKey: string | symbol,
+        parameterIndex: number){
+            ObjectReflection.addReflection(RequestArgumentType.PATH_VARIABLE,variableName,target,propertyKey,parameterIndex)
+        }
+}
 
