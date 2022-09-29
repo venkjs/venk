@@ -1,3 +1,5 @@
+import { HttpError } from './../errors/HttpError'; 
+import { BadRequestError } from './../errors/HttpError';
 import { RequestArgumentInformation } from '../decorators/reflect/ObjectReflection';
 import { Request, Response } from "express"
 import { HttpMethod, RequestArgumentType, REQUEST_ARGUMENT } from "../constants/HttpConstants"
@@ -63,21 +65,31 @@ export default class HttpServerBuilder{
 
     private static registerPatchEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
         ServerProvider.getServer().patch(path,(req:Request,res:Response)=>{
-            this.callHttpMethodAndReturnResponse(
-                req,res,target,propertyKey,descriptor
-            )
+                this.callHttpMethodAndReturnResponse(
+                    req,res,target,propertyKey,descriptor
+                )
         })
     }
 
+    private static handleError(e:any,req:Request,res:Response){
+        if(e instanceof HttpError){
+            res.status(e.getStatus()).send()
+        }
+    }
 
     private static callHttpMethodAndReturnResponse(req:Request,res:Response,target:any,propertyKey:string,descriptor:PropertyDescriptor){
-        let requestParams = this.getRequestParams(new Map(),target,propertyKey,descriptor)
-        let previousMethodDefinition = this.callMethodWithParameters(req,requestParams,target,propertyKey,descriptor)
-        let response :ResponseEntity<any>= descriptor.value.call(target)
-        console.log(descriptor.value)
-        res.status(response.getStatus())
-        res.send(response.getBody())
-        descriptor.value=previousMethodDefinition
+        try{
+            let requestParams = this.getRequestParams(new Map(),target,propertyKey,descriptor)
+            let previousMethodDefinition = this.callMethodWithParameters(req,res,requestParams,target,propertyKey,descriptor)
+            let response :ResponseEntity<any>= descriptor.value.call(target)
+            console.log(descriptor.value)
+            res.status(response.getStatus())
+            res.send(response.getBody())
+            descriptor.value=previousMethodDefinition
+        }catch(e){
+            console.log((<Error>e).message)
+            this.handleError(e,req,res)
+        }
     }
 
     private static getRequestParams(parameterMap:Map<number,any>,target:any,propertyKey:string,descriptor:PropertyDescriptor):Map<number,any>{
@@ -90,15 +102,20 @@ export default class HttpServerBuilder{
         return parameters
     }
 
-    private static callMethodWithParameters(req:Request,parameterMap:Map<number,RequestArgumentInformation>,target:any,propertyKey:string,descriptor:PropertyDescriptor){
+    private static callMethodWithParameters(req:Request,res:Response,parameterMap:Map<number,RequestArgumentInformation>,target:any,propertyKey:string,descriptor:PropertyDescriptor){
         let method = descriptor.value;
         let params =new Array<any>()
         parameterMap.forEach((object,key)=>{
             if(object.type==RequestArgumentType.REQUEST_PARAM){
+                if(req.query[object.value]==undefined){
+                    throw new BadRequestError(`Missing Request Parameter :${object.value} `)
+                }
                 params[key]=req.query[object.value]
             }
             if(object.type==RequestArgumentType.REQUEST_BODY){
-                console.log(req.body)
+                if(req.body==undefined){
+                    throw new BadRequestError(`Incoming request does not include a body.`)
+                }
                 params[key]  = req.body
             }
         })
