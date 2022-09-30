@@ -131,6 +131,33 @@ Calling /api/test2?parameter=test endpoing will return "Hello test" with status 
 Also @RequestBody decorator can be used for handling request body.
 
 
+## **Accessing Express Request and Response**
+
+Typespring allows you to access http request and response objects using decorators. You can use @HttpRequest and @HttpResponse decorators for this purpose.
+
+```javascript
+import { CarService } from './../service/CarService';
+import { HttpResponse,HttpRequest, Request,Response } from '@springts/typespring';
+import {GetMapping,Autowired ,ResponseEntity,Component, RequestParam, } from "@springts/typespring"
+
+@Component()
+export class CarApi{
+
+    @Autowired()
+    private carService:CarService
+
+    @GetMapping("/api/cars")
+    public getAllCars(@HttpRequest() req:Request , @HttpResponse() res:Response){
+        let cars = this.carService.getAllCars()
+        return ResponseEntity.status(200).body(cars)
+    }
+
+}
+```
+
+
+
+
 
 
 
