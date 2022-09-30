@@ -20,7 +20,9 @@ export  const HttpStatus={
 export const enum RequestArgumentType{
     REQUEST_PARAM,
     REQUEST_BODY,
-    PATH_VARIABLE
+    PATH_VARIABLE,
+    HTTP_REQUEST,
+    HTTP_RESPONSE
 }
 
 export const REQUEST_ARGUMENT="REQUEST_ARGUMENT"
