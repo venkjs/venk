@@ -118,6 +118,12 @@ export default class HttpServerBuilder{
                 }
                 params[key]  = req.body
             }
+            if(object.type==RequestArgumentType.HTTP_REQUEST){
+                params[key] = req
+            }
+            if(object.type==RequestArgumentType.HTTP_RESPONSE){
+                params[key] = res
+            }
         })
 
         descriptor.value = function () {

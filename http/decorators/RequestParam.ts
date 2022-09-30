@@ -27,3 +27,18 @@ export function PathVariable(variableName?:string){
         }
 }
 
+export function HttpRequest(){
+    return function(target: Object,
+        propertyKey: string | symbol,
+        parameterIndex: number){
+            ObjectReflection.addReflection(RequestArgumentType.HTTP_REQUEST,null,target,propertyKey,parameterIndex)
+        }
+}
+
+export function HttpResponse(){
+    return function(target: Object,
+        propertyKey: string | symbol,
+        parameterIndex: number){
+            ObjectReflection.addReflection(RequestArgumentType.HTTP_RESPONSE,null,target,propertyKey,parameterIndex)
+        }
+}
