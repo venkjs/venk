@@ -92,6 +92,8 @@ export class MainApplication{
 ```
 
 ### **Web Request and Response Handling**
+You can easily handle http request and response using typespring's decorators. Be aware that the return type should be ResponseEntity for your endpoints. 
+
 ```javascript
 @Component()
 export default class ClassC{
@@ -100,12 +102,12 @@ export default class ClassC{
     private classA:ClassA
 
     @GetMapping("/api/test1")
-    public test():any{
+    public test():ResponseEntity<String>{
         return ResponseEntity.status(200).body("test")
     }
 
     @PostMapping("/api/test2")
-    public test2(){
+    public test2():ResponseEntity<Array>{
         let data = this.classA.test()
         return ResponseEntity.status(HttpStatus.OK).body(data)
     }
@@ -120,7 +122,7 @@ export default class ClassC{
 export default class ClassC{
 
     @GetMapping("/api/test2")
-    public test2(@RequestParam() parameter:String){
+    public test2(@RequestParam() parameter:String):ResponseEntity<String>{
         let testParam = `Hello ${parameter}`
         return ResponseEntity.status(HttpStatus.OK).body(testParam)
     }
@@ -147,7 +149,7 @@ export class CarApi{
     private carService:CarService
 
     @GetMapping("/api/cars")
-    public getAllCars(@HttpRequest() req:Request , @HttpResponse() res:Response){
+    public getAllCars(@HttpRequest() req:Request , @HttpResponse() res:Response):ResponseEntity<Array>{
         let cars = this.carService.getAllCars()
         return ResponseEntity.status(200).body(cars)
     }
