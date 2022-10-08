@@ -1,8 +1,10 @@
+import { InvalidReturnTypeError } from './../errors/InvalidReturnTypeError';
+import { ResponseEntity } from "../api/ResponseEntity"
 import { HttpMethod } from "../constants/HttpConstants"
 import HttpServerBuilder from "../server/HttpServerBuilder"
 import HttpServerObservable from "../server/HttpServerObservable"
 import HttpServerObserver from "../server/HttpServerObserver"
-
+import "reflect-metadata"
 export function PostMapping(path:string){
     return RequestMapping(path,HttpMethod.POST)
 }
@@ -25,6 +27,10 @@ export function PatchMapping(path:string){
 
 export function RequestMapping(path:string,method:HttpMethod){
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor){
+        const returnType = Reflect.getMetadata('design:returntype', target, propertyKey)
+        if(returnType==undefined || returnType.name != "ResponseEntity"){
+            throw new InvalidReturnTypeError(`Return type must be ResponseEntity for function : ${propertyKey}`)
+        }
         HttpRequestBinder(path,target,propertyKey,descriptor,method)
     }
 }
