@@ -157,9 +157,31 @@ export class CarApi{
 }
 ```
 
+## **Using Middleware for Endpoints**
+
+You can easily use your middlewares in your api endpoints. The first thing to do is creating a static function that takes 3 arguments (Request, Response and NextFunction). Note that you should call next() function in your middleware. Otherwise, the endpoint will not return your responseç
+
+```javascript
+import { Request, Response } from "@springts/typespring";
+
+export default class CarApiMiddlewares{
+
+    static checkParams(req:Request,res:Response,next:Function){
+        // Write your logics here
+        next() //Call express' NextFunction method
+    }
+
+}
+```
+After that, you can pass your middlewares to the corresponding Http mapping decorator as shown below. 
+```javascript
+    @GetMapping("/api/cars",[CarApiMiddlewares.checkParams])  //Middleware function is passed in array
+    public getAllCars(@RequestParam() param:string):ResponseEntity<Array<String>>{
+        let cars = this.carService.getAllCars()
+        console.log(param)
+        return ResponseEntity.status(200).body(cars)
+    }
 
 
-
-
-
+```
 
