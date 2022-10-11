@@ -60,7 +60,7 @@ export default class ClassB{
 
 ### **Initializing A Web Server**
 Typespring framework allows you to create web api and handle web requests easily. 
-The first step is creating a main file that has a main class as shown below.
+The first step is creating a main file that has a main class as shown below. 
 
 ```javascript
 @TypespringApplication()
@@ -70,6 +70,7 @@ export class MainApplication{
     }
 }
 ```
+Default port of your typespring application is 3000. But you can change it by adding SERVER_PORT environment variable on your .env file. 
 After building and running main file, TypespringInitiliazer.run function will initialize a web server immeditely. 
 But for invoking components, we need to import them in the main file. It doesnt matter where you are importing Components. The main purpose is invoking @Component decorators of classes.
 
