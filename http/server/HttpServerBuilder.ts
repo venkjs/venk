@@ -1,7 +1,7 @@
 import { HttpError } from './../errors/HttpError'; 
 import { BadRequestError } from './../errors/HttpError';
 import { RequestArgumentInformation } from '../decorators/reflect/ObjectReflection';
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { HttpMethod, RequestArgumentType, REQUEST_ARGUMENT } from "../constants/HttpConstants"
 import {ServerProvider} from "./ServerProvider"
 import {ResponseEntity} from '../api/ResponseEntity';
@@ -9,13 +9,35 @@ import {ResponseEntity} from '../api/ResponseEntity';
 export default class HttpServerBuilder{
 
 
-    public static registerEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,method:HttpMethod){
+    public static registerEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,method:HttpMethod,middlewares?:Array<Function>){
        switch(method){
             case HttpMethod.POST:
                 this.registerPostEndpoint(target,propertyKey,descriptor,path)
                 break;
             case HttpMethod.GET:
-                this.registerGetEndpoint(target,propertyKey,descriptor,path)
+                this.registerGetEndpoint(target,propertyKey,descriptor,path,middlewares)
+                break;
+            case HttpMethod.PUT:
+                this.registerPutEndpoint(target,propertyKey,descriptor,path,middlewares)
+                break;
+            case HttpMethod.DELETE:
+                this.registerDeleteEndpoint(target,propertyKey,descriptor,path,middlewares)
+                break;
+            case HttpMethod.PATCH:
+                this.registerPatchEndpoint(target,propertyKey,descriptor,path,middlewares)
+                break;
+            default:
+                throw new Error("Invalid Http Method.. Please only use GET, POST , PUT, DELETE and PATCH Methods")
+       }
+    }
+
+    public static registerAsyncEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,method:HttpMethod,middlewares?:Array<Function>){
+        switch(method){
+            case HttpMethod.POST:
+                this.registerPostEndpoint(target,propertyKey,descriptor,path)
+                break;
+            case HttpMethod.GET:
+                this.registerAsyncGetEndpoint(target,propertyKey,descriptor,path,middlewares)
                 break;
             case HttpMethod.PUT:
                 this.registerPutEndpoint(target,propertyKey,descriptor,path)
@@ -31,7 +53,16 @@ export default class HttpServerBuilder{
        }
     }
 
-    private static registerGetEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+
+    private static registerGetEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,middlewares?:Array<Function>){
+        middlewares?.forEach(middleware=>{
+            ServerProvider.getServer().use(path,(req:Request,res:Response,next:NextFunction)=>{
+                if(middleware!=undefined)
+                    middleware(req,res,next)
+                else next()
+            })
+        })
+
         ServerProvider.getServer().get(path,(req:Request,res:Response)=>{
             this.callHttpMethodAndReturnResponse(
                 req,res,target,propertyKey,descriptor
@@ -39,7 +70,31 @@ export default class HttpServerBuilder{
         })
     }
 
-    private static registerPostEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+    private static registerAsyncGetEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,middlewares?:Array<Function>){
+        middlewares?.forEach(middleware=>{
+            ServerProvider.getServer().get(path,(req:Request,res:Response,next:NextFunction)=>{
+                if(middleware!=undefined)
+                    middleware(req,res,next)
+                else next()
+            })
+        })
+
+        ServerProvider.getServer().get(path,(req:Request,res:Response)=>{
+            this.callHttpMethodAndReturnResponse(
+                req,res,target,propertyKey,descriptor
+            )
+        })
+    }
+
+    private static registerPostEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,middlewares?:Array<Function>){
+        middlewares?.forEach(middleware=>{
+            ServerProvider.getServer().post(path,(req:Request,res:Response,next:NextFunction)=>{
+                if(middleware!=undefined)
+                    middleware(req,res,next)
+                else next()
+            })
+        })
+
         ServerProvider.getServer().post(path,(req:Request,res:Response)=>{
             this.callHttpMethodAndReturnResponse(
                 req,res,target,propertyKey,descriptor
@@ -47,7 +102,14 @@ export default class HttpServerBuilder{
         })
     }
 
-    private static registerPutEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+    private static registerPutEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,middlewares?:Array<Function>){
+        middlewares?.forEach(middleware=>{
+            ServerProvider.getServer().put(path,(req:Request,res:Response,next:NextFunction)=>{
+                if(middleware!=undefined)
+                    middleware(req,res,next)
+                else next()
+            })
+        })
         ServerProvider.getServer().put(path,(req:Request,res:Response)=>{
             this.callHttpMethodAndReturnResponse(
                 req,res,target,propertyKey,descriptor
@@ -55,7 +117,15 @@ export default class HttpServerBuilder{
         })
     }
 
-    private static registerDeleteEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+    private static registerDeleteEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,middlewares?:Array<Function>){
+        middlewares?.forEach(middleware=>{
+            ServerProvider.getServer().delete(path,(req:Request,res:Response,next:NextFunction)=>{
+                if(middleware!=undefined)
+                    middleware(req,res,next)
+                else next()
+            })
+        })
+
         ServerProvider.getServer().delete(path,(req:Request,res:Response)=>{
             this.callHttpMethodAndReturnResponse(
                 req,res,target,propertyKey,descriptor
@@ -63,7 +133,14 @@ export default class HttpServerBuilder{
         })
     }
 
-    private static registerPatchEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string){
+    private static registerPatchEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,path:string,middlewares?:Array<Function>){
+        middlewares?.forEach(middleware=>{
+            ServerProvider.getServer().patch(path,(req:Request,res:Response,next:NextFunction)=>{
+                if(middleware!=undefined)
+                    middleware(req,res,next)
+                else next()
+            })
+        })
         ServerProvider.getServer().patch(path,(req:Request,res:Response)=>{
                 this.callHttpMethodAndReturnResponse(
                     req,res,target,propertyKey,descriptor
@@ -77,11 +154,11 @@ export default class HttpServerBuilder{
         }
     }
 
-    private static callHttpMethodAndReturnResponse(req:Request,res:Response,target:any,propertyKey:string,descriptor:PropertyDescriptor){
+    private static async callHttpMethodAndReturnResponse(req:Request,res:Response,target:any,propertyKey:string,descriptor:PropertyDescriptor){
         try{
             let requestParams = this.getRequestParams(new Map(),target,propertyKey,descriptor)
             let previousMethodDefinition = this.callMethodWithParameters(req,res,requestParams,target,propertyKey,descriptor)
-            let response :ResponseEntity<any>= descriptor.value.call(target)
+            let response :ResponseEntity<any>= await descriptor.value.call(target)
             console.log(descriptor.value)
             res.status(response.getStatus())
             res.send(response.getBody())
@@ -126,7 +203,7 @@ export default class HttpServerBuilder{
             }
         })
 
-        descriptor.value = function () {
+        descriptor.value =async function () {
             return method.call(target,...params);
         }
         return method

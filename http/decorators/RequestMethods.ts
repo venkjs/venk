@@ -9,33 +9,34 @@ export function PostMapping(path:string){
     return RequestMapping(path,HttpMethod.POST)
 }
 
-export function GetMapping(path:string){
-    return RequestMapping(path,HttpMethod.GET)
+export function GetMapping(path:string,middlewares?:Array<Function>){
+    return RequestMapping(path,HttpMethod.GET,middlewares)
 }
 
-export function PutMapping(path:string){
-    return RequestMapping(path,HttpMethod.PUT)
+export function PutMapping(path:string,middlewares?:Array<Function>){
+    return RequestMapping(path,HttpMethod.PUT,middlewares)
 }
 
-export function DeleteMapping(path:string){
-    return RequestMapping(path,HttpMethod.DELETE)
+export function DeleteMapping(path:string,middlewares?:Array<Function>){
+    return RequestMapping(path,HttpMethod.DELETE,middlewares)
 }
 
-export function PatchMapping(path:string){
-    return RequestMapping(path,HttpMethod.PATCH)
+export function PatchMapping(path:string,middlewares?:Array<Function>){
+    return RequestMapping(path,HttpMethod.PATCH,middlewares)
 }
 
-export function RequestMapping(path:string,method:HttpMethod){
+export function RequestMapping(path:string,method:HttpMethod,middlewares?:Array<Function>){
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor){
         const returnType = Reflect.getMetadata('design:returntype', target, propertyKey)
-        if(returnType==undefined || returnType.name != "ResponseEntity"){
-            throw new InvalidReturnTypeError(`Return type must be ResponseEntity for function : ${propertyKey}`)
+        console.log(returnType.name)
+        if(returnType==undefined || (returnType.name != "ResponseEntity" && returnType.name!="Promise")){
+            throw new InvalidReturnTypeError(`Return type must be ResponseEntity or Promise<ResponseEntity<T>> for function : ${propertyKey}`)
         }
-        HttpRequestBinder(path,target,propertyKey,descriptor,method)
+        HttpRequestBinder(path,target,propertyKey,descriptor,method,middlewares)
     }
 }
 
-export function HttpRequestBinder(path:string,target:any,propertyKey:string,descriptor: PropertyDescriptor,method:HttpMethod){
-    let observer = new HttpServerObserver(()=>HttpServerBuilder.registerEndpoint(target,propertyKey,descriptor,path,method))
+export function HttpRequestBinder(path:string,target:any,propertyKey:string,descriptor: PropertyDescriptor,method:HttpMethod,middlewares?:Array<Function>){
+    let observer = new HttpServerObserver(()=>HttpServerBuilder.registerEndpoint(target,propertyKey,descriptor,path,method,middlewares))
     HttpServerObservable.getInstance().register(observer)
 }
