@@ -92,7 +92,7 @@ export class MainApplication{
 ```
 
 ### **Web Request and Response Handling**
-You can easily handle http request and response using typespring's decorators. Be aware that the return type should be ResponseEntity for your endpoints. 
+You can easily handle http request and response using typespring's decorators. Be aware that the return type should be ResponseEntity<T> or Promise<ResponseEntity<T>> for your endpoints. 
 
 ```javascript
 @Component()
