@@ -5,7 +5,7 @@ export class ResponseEntity<T>{
     
     private constructor(status:number){
         this.status=status
-        Object.setPrototypeOf(this,ResponseEntity)
+        Object.setPrototypeOf(ResponseEntity.prototype,ResponseEntity)
     }
 
     public static status<T>(status:number):ResponseEntity<T>{
