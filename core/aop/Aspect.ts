@@ -84,7 +84,11 @@ function callAdviceFunctions(propertyName:string,uuid:string,joinPoint:JoinPoint
         let methodName = method.name.replace('*','.*')
         let regex = new RegExp('^'+methodName+"$")
         if(types.includes(method.type) &&regex.test(propertyName)){
-            method.target.call(method.target,joinPoint)
+            try{
+                method.target.call(method.target,joinPoint)
+            }catch(error){
+                console.log(error)
+            }
         }
     })
 }
