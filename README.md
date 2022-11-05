@@ -182,7 +182,35 @@ After that, you can pass your middlewares to the corresponding Http mapping deco
         console.log(param)
         return ResponseEntity.status(200).body(cars)
     }
-
-
 ```
 
+  ## **Using Aspects**
+  You can define aspect functions which are executed before ,after or around any function. The target class must have @Workable decorator in order to use aspects for it. Workable decorator will define a unique id for the target class.  
+  ```typescript
+  @Workable()
+  @Component()
+  export class NameService{
+      public getNames(){
+          return ["Hello","World"]
+      }
+  }
+  ```
+After that you can define your aspect functions as shown below.
+
+```typescript
+  export class AspectTest{
+  
+    @After(NameService,"get*")
+    public  testAfter(JoinPoint:JoinPoint){
+        console.log(JoinPoint)
+        return "Hello world"
+    }
+}
+
+  ```
+  @After decorator indicated testAfter method will be executed after any method which is starting with "get". Aspect decorators takes 2 arguments, the first one is a workable class, and the second one is a wilcard for indicating target methods.
+  
+  
+  
+  
+  
