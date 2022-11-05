@@ -186,7 +186,7 @@ After that, you can pass your middlewares to the corresponding Http mapping deco
 
   ## **Using Aspects**
   You can define aspect functions which are executed before ,after or around any function. The target class must have @Workable decorator in order to use aspects for it. Workable decorator will define a unique id for the target class.  
-  ```typescript
+  ```javascript
   @Workable()
   @Component()
   export class NameService{
@@ -197,7 +197,7 @@ After that, you can pass your middlewares to the corresponding Http mapping deco
   ```
 After that you can define your aspect functions as shown below.
 
-```typescript
+```javascript
   export class AspectTest{
   
     @After(NameService,"get*")
