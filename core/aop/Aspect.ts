@@ -40,10 +40,10 @@ export function Workable(){
         for (const propertyName in target.prototype) {
             
             const propertyValue = target.prototype[propertyName];
-            const isMethod = propertyValue instanceof Function;
+            const isMethod = propertyValue instanceof Function || propertyValue instanceof Promise;
             if (!isMethod)
                 continue;
-    
+
             const descriptor = getMethodDescriptor(propertyName);
             if(descriptor!=null){
                 const originalMethod = descriptor.value;
@@ -61,6 +61,7 @@ export function Workable(){
                 Object.defineProperty(target.prototype, propertyName, descriptor);   
             }
         }
+        console.log("Workable class is defined  for "+JSON.stringify(target.name)+" with this id: "+uuid)
         WorkableClassHelper.add(workableClass)
         function getMethodDescriptor(propertyName: string): TypedPropertyDescriptor<any>|undefined {
             if (target.prototype.hasOwnProperty(propertyName))
@@ -80,15 +81,21 @@ export function Workable(){
 }
 
 function callAdviceFunctions(propertyName:string,uuid:string,joinPoint:JoinPoint, types:Array<AdviceType>){
-    AdviceHelper.getMethodListByName(uuid)?.forEach(method=>{
-        let methodName = method.name.replace('*','.*')
-        let regex = new RegExp('^'+methodName+"$")
-        if(types.includes(method.type) &&regex.test(propertyName)){
-            try{
-                method.target.call(method.target,joinPoint)
-            }catch(error){
-                console.log(error)
+    try{
+        AdviceHelper.getMethodListByName(uuid)?.forEach(method=>{
+            let methodName = method.name.replace('*','.*')
+            let regex = new RegExp('^'+methodName+"$")
+            if(types.includes(method.type) &&regex.test(propertyName)){
+                try{
+                    method.target.call(method.target,joinPoint)
+                }catch(error){
+                    console.log(error)
+                }
             }
-        }
-    })
+        })
+
+    }catch(e){
+        console.log(e)
+    }
+    
 }
