@@ -2,7 +2,7 @@ import { HttpError } from './../errors/HttpError';
 import { BadRequestError } from './../errors/HttpError';
 import { RequestArgumentInformation } from '../decorators/reflect/ObjectReflection';
 import { NextFunction, Request, Response } from "express"
-import { HttpMethod, RequestArgumentType, REQUEST_ARGUMENT } from "../constants/HttpConstants"
+import { HttpMethod, HttpStatus, RequestArgumentType, REQUEST_ARGUMENT } from "../constants/HttpConstants"
 import {ServerProvider} from "./ServerProvider"
 import {ResponseEntity} from '../api/ResponseEntity';
 
@@ -151,6 +151,8 @@ export default class HttpServerBuilder{
     private static handleError(e:any,req:Request,res:Response){
         if(e instanceof HttpError){
             res.status(e.getStatus()).send()
+        }else{
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
         }
     }
 
@@ -159,7 +161,6 @@ export default class HttpServerBuilder{
             let requestParams = this.getRequestParams(new Map(),target,propertyKey,descriptor)
             let previousMethodDefinition = this.callMethodWithParameters(req,res,requestParams,target,propertyKey,descriptor)
             let response :ResponseEntity<any>= await descriptor.value.call(target)
-            console.log(descriptor.value)
             res.status(response.getStatus())
             res.send(response.getBody())
             descriptor.value=previousMethodDefinition
