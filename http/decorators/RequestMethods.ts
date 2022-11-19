@@ -1,3 +1,4 @@
+import { REQUEST_MAPPING_METHODS_SYMBOL } from './../constants/PrototypeConstants';
 import { InvalidReturnTypeError } from './../errors/InvalidReturnTypeError';
 import { ResponseEntity } from "../api/ResponseEntity"
 import { HttpMethod } from "../constants/HttpConstants"
@@ -32,7 +33,14 @@ export function RequestMapping(path:string,method:HttpMethod,middlewares?:Array<
         if(returnType==undefined || (returnType.name != "ResponseEntity" && returnType.name!="Promise")){
             throw new InvalidReturnTypeError(`Return type must be ResponseEntity or Promise<ResponseEntity<T>> for function : ${propertyKey}`)
         }
-        HttpRequestBinder(path,target,propertyKey,descriptor,method,middlewares)
+        const requestBindingMethod = (controllerPath:string,controllerMiddlewares?:Array<Function>)=>{
+            if(controllerPath==null) controllerPath=""
+            if(middlewares==null) middlewares=new Array();
+            if(controllerMiddlewares==null) controllerMiddlewares=new Array();
+            HttpRequestBinder(controllerPath+path,target,propertyKey,descriptor,method,[...controllerMiddlewares,...middlewares])
+        }
+        target[REQUEST_MAPPING_METHODS_SYMBOL] = target[REQUEST_MAPPING_METHODS_SYMBOL] || new Map()
+        target[REQUEST_MAPPING_METHODS_SYMBOL].set(propertyKey,requestBindingMethod)
     }
 }
 

@@ -83,14 +83,10 @@ export function Workable(){
 function callAdviceFunctions(propertyName:string,uuid:string,joinPoint:JoinPoint, types:Array<AdviceType>){
     try{
         AdviceHelper.getMethodListByName(uuid)?.forEach(method=>{
-            let methodName = method.name.replace('*','.*')
+            let methodName = method.name.split('*').join(".*")
             let regex = new RegExp('^'+methodName+"$")
             if(types.includes(method.type) &&regex.test(propertyName)){
-                try{
-                    method.target.call(method.target,joinPoint)
-                }catch(error){
-                    console.log(error)
-                }
+                method.target.call(method.target,joinPoint)
             }
         })
 

@@ -16,7 +16,7 @@ export default class HttpServerObservable implements Observable<Observer<Object>
     }
 
     public setServerStatus(status:Boolean){
-        this.serverStatus=true;
+        this.serverStatus=status;
         this.notifyAll()
     }
 
