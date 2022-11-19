@@ -6,9 +6,6 @@ import HttpServerBuilder from "../server/HttpServerBuilder"
 import HttpServerObservable from "../server/HttpServerObservable"
 import HttpServerObserver from "../server/HttpServerObserver"
 import "reflect-metadata"
-
-
-
 export function PostMapping(path:string){
     return RequestMapping(path,HttpMethod.POST)
 }
@@ -36,9 +33,11 @@ export function RequestMapping(path:string,method:HttpMethod,middlewares?:Array<
         if(returnType==undefined || (returnType.name != "ResponseEntity" && returnType.name!="Promise")){
             throw new InvalidReturnTypeError(`Return type must be ResponseEntity or Promise<ResponseEntity<T>> for function : ${propertyKey}`)
         }
-        const requestBindingMethod = (controllerPath:string)=>{
+        const requestBindingMethod = (controllerPath:string,controllerMiddlewares?:Array<Function>)=>{
             if(controllerPath==null) controllerPath=""
-            HttpRequestBinder(controllerPath+path,target,propertyKey,descriptor,method,middlewares)
+            if(middlewares==null) middlewares=new Array();
+            if(controllerMiddlewares==null) controllerMiddlewares=new Array();
+            HttpRequestBinder(controllerPath+path,target,propertyKey,descriptor,method,[...controllerMiddlewares,...middlewares])
         }
         target[REQUEST_MAPPING_METHODS_SYMBOL] = target[REQUEST_MAPPING_METHODS_SYMBOL] || new Map()
         target[REQUEST_MAPPING_METHODS_SYMBOL].set(propertyKey,requestBindingMethod)
