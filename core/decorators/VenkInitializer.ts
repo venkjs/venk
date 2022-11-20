@@ -1,6 +1,6 @@
 import {ServerProvider} from "../../http/server/ServerProvider";
 
-export class TypespringInitiliazer{
+export class VenkInitiliazer{
 
     public static run(...args:any){
       ServerProvider.init(...args)
