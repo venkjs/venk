@@ -140,8 +140,8 @@ Venk.js allows you to access http request and response objects using decorators.
 
 ```javascript
 import { CarService } from './../service/CarService';
-import { HttpResponse,HttpRequest, Request,Response } from '@springts/typespring';
-import {GetMapping,Autowired ,ResponseEntity,Component, RequestParam, } from "@springts/typespring"
+import { HttpResponse,HttpRequest, Request,Response } from 'venk';
+import {GetMapping,Autowired ,ResponseEntity,Component, RequestParam, } from "venk"
 
 @Component()
 export class CarApi{
@@ -163,7 +163,7 @@ export class CarApi{
 You can easily use your middlewares in your api endpoints. The first thing to do is creating a static function that takes 3 arguments (Request, Response and NextFunction). Note that you should call next() function in your middleware. Otherwise, the endpoint will not return your responseç
 
 ```javascript
-import { Request, Response } from "@springts/typespring";
+import { Request, Response } from "venk";
 
 export default class CarApiMiddlewares{
 
