@@ -1,4 +1,4 @@
-export function TypespringApplication(){
+export function VenkApplication(){
 
     return function(ctr:any){
         let application = new ctr()

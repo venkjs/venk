@@ -1,2 +1,2 @@
-export {TypespringInitiliazer}  from "./TypespringInitializer";
-export * from "./TypespringApplication"
+export {VenkInitiliazer}  from "./VenkInitializer";
+export {VenkApplication} from "./VenkApplication"

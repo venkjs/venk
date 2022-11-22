@@ -1,10 +1,10 @@
-# Typespring
-TypeSpring is an Express.js and Typescript based application framework that allows you to develop annotation based restful APIs like in SpringBoot 
+# Venk.js
+Venk.js is an Express.js and Typescript based application framework that allows you to develop annotation based restful APIs like in SpringBoot 
 
 ## **Installation**
 You can install module through npm. In order to install, Node.js must be installed on your system.
 ```
-$ npm install @springts/typespring
+$ npm install venk
 ```
 ## **Configurations**
 For building your application, you have to use these properties on your tsconfig.json file. 
@@ -28,7 +28,7 @@ Also, strictPropertyInitialization is disabled for dependency injection. and emi
 ```
 
 ### **Define component for dependency injection**
-In Typespring framework, you can easily define a component using @Component() decorator. This decorator creates an instance for dependency injection.
+In Venk framework, you can easily define a component using @Component() decorator. This decorator creates an instance for dependency injection.
 ```javascript
 @Component()
 export default class ClassB{
@@ -38,7 +38,7 @@ export default class ClassB{
 
 
 ### **Field Injection**
-For now, Typespring only supports field injection using Autowired decorator. In the future, construction based injection will be supported.
+For now, Venk only supports field injection using Autowired decorator. In the future, construction based injection will be supported.
 ```javascript
 @Component()
 export default class ClassA{
@@ -59,19 +59,19 @@ export default class ClassB{
 ```
 
 ### **Initializing A Web Server**
-Typespring framework allows you to create web api and handle web requests easily. 
+Venk framework allows you to create web api and handle web requests easily. 
 The first step is creating a main file that has a main class as shown below. 
 
 ```javascript
-@TypespringApplication()
+@VenkApplication()
 export class MainApplication{
     public main(){
-        TypespringInitiliazer.run()
+        VenkInitiliazer.run()
     }
 }
 ```
-Default port of your typespring application is 3000. But you can change it by adding SERVER_PORT environment variable on your .env file. 
-After building and running main file, TypespringInitiliazer.run function will initialize a web server immeditely. 
+Default port of your Venk application is 3000. But you can change it by adding SERVER_PORT environment variable on your .env file. 
+After building and running main file, VenkInitiliazer.run function will initialize a web server immeditely. 
 But for invoking components, we need to import them in the main file. It doesnt matter where you are importing Components. The main purpose is invoking @Component decorators of classes.
 
 ```javascript
@@ -84,16 +84,16 @@ export {Components}
 ```
 
 ```javascript
-@TypespringApplication()
+@VenkApplication()
 export class MainApplication{
     public main(){
-        TypespringInitiliazer.run(Components)
+        VenkInitiliazer.run(Components)
     }
 }
 ```
 
 ### **Web Request and Response Handling**
-You can easily handle http request and response using typespring's decorators. Be aware that the return type should be ResponseEntity<T> or Promise<ResponseEntity<T>> for your endpoints. 
+You can easily handle http request and response using Venk's decorators. Be aware that the return type should be ResponseEntity<T> or Promise<ResponseEntity<T>> for your endpoints. 
 
 ```javascript
 @Controller("/api/test")
@@ -129,19 +129,19 @@ export default class ClassC{
     }
 }
 ```
-Calling /api/test2?parameter=test endpoing will return "Hello test" with status code 200. If request does not inckudes the parameter, typespring will return a response with status code 400 (HTTP Bad Request).
+Calling /api/test2?parameter=test endpoing will return "Hello test" with status code 200. If request does not inckudes the parameter, Venk.js will return a response with status code 400 (HTTP Bad Request).
 
 Also @RequestBody decorator can be used for handling request body.
 
 
 ## **Accessing Express Request and Response**
 
-Typespring allows you to access http request and response objects using decorators. You can use @HttpRequest and @HttpResponse decorators for this purpose.
+Venk.js allows you to access http request and response objects using decorators. You can use @HttpRequest and @HttpResponse decorators for this purpose.
 
 ```javascript
 import { CarService } from './../service/CarService';
-import { HttpResponse,HttpRequest, Request,Response } from '@springts/typespring';
-import {GetMapping,Autowired ,ResponseEntity,Component, RequestParam, } from "@springts/typespring"
+import { HttpResponse,HttpRequest, Request,Response } from 'venk';
+import {GetMapping,Autowired ,ResponseEntity,Component, RequestParam, } from "venk"
 
 @Controller("api/test")
 export class CarApi{
@@ -163,7 +163,7 @@ export class CarApi{
 You can easily use your middlewares in your api endpoints. The first thing to do is creating a static function that takes 3 arguments (Request, Response and NextFunction). Note that you should call next() function in your middleware. Otherwise, the endpoint will not return your responseç
 
 ```javascript
-import { Request, Response } from "@springts/typespring";
+import { Request, Response } from "venk";
 
 export default class CarApiMiddlewares{
 
