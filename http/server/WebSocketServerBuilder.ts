@@ -3,15 +3,12 @@ import { ServerProvider } from './ServerProvider';
 export default class WebSocketServerBuilder {
 
     public static registerWebsocketEndpoint(target:any,propertyKey:string,descriptor:PropertyDescriptor,event:string,middlewares?:Array<Function>){
-        console.log("registred socket event "+event)
-        SocketProvider.getApp().on("connection",()=>{
-            SocketProvider.getSocket().on(event,()=>{
-                
+        console.log("Registred socket event "+event)
+        SocketProvider.getApp().on("connection",(socket)=>{
+            socket.on(event,()=>{
                 this.callSocketMethod(target,propertyKey,descriptor)
             })
         })
-
-
     }
     
     public static callWsFunction(target:any,propertyKey:string,descriptor:PropertyDescriptor){
