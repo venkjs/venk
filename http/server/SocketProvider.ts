@@ -9,7 +9,11 @@ export class SocketProvider{
     public static init(...args:any){
         if(!this.app){
             try{
-                this.app=new Server(ServerProvider.getHttpServer())
+                this.app=new Server(ServerProvider.getHttpServer(),{
+                    cors: {
+                      origin: '*',
+                    }
+                  })
                 WebSocketServerObservable.getInstance().setServerStatus(true)
             }catch(e){
                 WebSocketServerObservable.getInstance().setServerStatus(false)
