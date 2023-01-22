@@ -212,7 +212,7 @@ After that you can define your aspect functions as shown below.
   
   
   
-  # **Web Socket **
+  # **Web Socket**
   In venk.js, you can easily do socket programming using decorators. 
   As you see on following example code, events are listened using decorators. @OnConnect decorator implies the function will be triggered when connection is created, and @OnDisconnect decorator will make the function to be triggered when user disconnects. 
   Also, the function that is decorated by @OnEvent("test") will be triggered when user emits an event called "test".
