@@ -96,18 +96,18 @@ export class MainApplication{
 You can easily handle http request and response using Venk's decorators. Be aware that the return type should be ResponseEntity<T> or Promise<ResponseEntity<T>> for your endpoints. 
 
 ```javascript
-@Component()
+@Controller("/api/test")
 export default class ClassC{
 
     @Autowired()
     private classA:ClassA
 
-    @GetMapping("/api/test1")
+    @GetMapping("/test1")
     public test():ResponseEntity<String>{
         return ResponseEntity.status(200).body("test")
     }
 
-    @PostMapping("/api/test2")
+    @PostMapping("/test2")
     public test2():ResponseEntity<Array>{
         let data = this.classA.test()
         return ResponseEntity.status(HttpStatus.OK).body(data)
@@ -119,10 +119,10 @@ export default class ClassC{
 ### **Handling Request Params and Body**
 
 ```javascript 
-@Component()
+@Controller("api/test")
 export default class ClassC{
 
-    @GetMapping("/api/test2")
+    @GetMapping("/test2")
     public test2(@RequestParam() parameter:String):ResponseEntity<String>{
         let testParam = `Hello ${parameter}`
         return ResponseEntity.status(HttpStatus.OK).body(testParam)
@@ -143,13 +143,13 @@ import { CarService } from './../service/CarService';
 import { HttpResponse,HttpRequest, Request,Response } from 'venk';
 import {GetMapping,Autowired ,ResponseEntity,Component, RequestParam, } from "venk"
 
-@Component()
+@Controller("api/test")
 export class CarApi{
 
     @Autowired()
     private carService:CarService
 
-    @GetMapping("/api/cars")
+    @GetMapping("/cars")
     public getAllCars(@HttpRequest() req:Request , @HttpResponse() res:Response):ResponseEntity<Array>{
         let cars = this.carService.getAllCars()
         return ResponseEntity.status(200).body(cars)
@@ -212,7 +212,7 @@ After that you can define your aspect functions as shown below.
   
   
   
-  # **Web Socket **
+  # **Web Socket**
   In venk.js, you can easily do socket programming using decorators. 
   As you see on following example code, events are listened using decorators. @OnConnect decorator implies the function will be triggered when connection is created, and @OnDisconnect decorator will make the function to be triggered when user disconnects. 
   Also, the function that is decorated by @OnEvent("test") will be triggered when user emits an event called "test".
