@@ -1,0 +1,2 @@
+import { ResponseEntity } from './../../http/api/ResponseEntity';
+export type RequestMappingType = TypedPropertyDescriptor<(... p:any[]) => Promise<ResponseEntity<any>>> | TypedPropertyDescriptor<(... p:any[]) => ResponseEntity<any>>

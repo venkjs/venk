@@ -1,3 +1,4 @@
+import { RequestMappingType } from './../../core/types/DecoratorTypes';
 import { REQUEST_MAPPING_METHODS_SYMBOL } from './../constants/PrototypeConstants';
 import { InvalidReturnTypeError } from './../errors/InvalidReturnTypeError';
 import { ResponseEntity } from "../api/ResponseEntity"
@@ -26,10 +27,9 @@ export function PatchMapping(path:string,middlewares?:Array<Function>){
     return RequestMapping(path,HttpMethod.PATCH,middlewares)
 }
 
-export function RequestMapping(path:string,method:HttpMethod,middlewares?:Array<Function>){
-    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor){
+export function RequestMapping(path:string,method:HttpMethod,middlewares?:Array<Function>) {
+    return function (target: any, propertyKey: string, descriptor: RequestMappingType ) {
         const returnType = Reflect.getMetadata('design:returntype', target, propertyKey)
-        console.log(returnType.name)
         if(returnType==undefined || (returnType.name != "ResponseEntity" && returnType.name!="Promise")){
             throw new InvalidReturnTypeError(`Return type must be ResponseEntity or Promise<ResponseEntity<T>> for function : ${propertyKey}`)
         }
